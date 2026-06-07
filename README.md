@@ -6,6 +6,11 @@ This application focuses on developing an electric vehicle charging station syst
 The charging station will support Wi-Fi, cellular, or similar communication methods to synchronize data with remote servers; however, it will operate independently without requiring a constant internet connection. This ensures the station can continue providing charging services and processing local operations even when offline.
 
 
+### Ref
+
+Dev board NodeMcu (ESP8266)
+
+https://www.steren.cr/placa-de-desarrollo-nodemcu-esp8266.html?srsltid=AfmBOopTaZbdeWu3RozMMDVIlxj9qleSqFoaq0poM3puSKhX14sWzs0X
 
 #### Contacts
 
