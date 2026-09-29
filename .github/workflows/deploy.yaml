@@ -1,0 +1,51 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 1. Get source code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Install Java
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      # 3. Build and test
+      - name: Build
+        run: ./mvnw clean package
+
+      # 4. Copy JAR to server
+      - name: Deploy JAR
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "target/chargingstation-0.0.1-SNAPSHOT.jar"
+          target: "/opt/chargingstation/"
+          strip_components: 1
+
+      # 5. Restart application
+      - name: Restart application
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            sudo systemctl restart chargingstation
+            sudo systemctl status chargingstation --no-pager
